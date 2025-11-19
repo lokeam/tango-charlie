@@ -1,4 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+**Hotel Charlie** is a showcase of data pre-processing, charting and visualization using the [Highcharts](https://www.highcharts.com) library is simulated to look like radar detections.
+
+## Screenshots
+
+
+
+## Technical Highlights
+<details>
+  <summary>🛠️ Tech Stack & Tooling</summary>
+
+  **Frontend/Backend**
+  - Next.js 16 (App Router) + React 19 + TypeScript 5
+  - TailwindCSS 4 + Motion (Framer Motion successor)
+  - Highcharts 12.4 with custom responsive components
+  - TSParticles engine for interactive particle effects
+
+</details>
+
+<details>
+  <summary>⚙️ Key Technical Features</summary>
+
+  **Advanced Data Processing**
+  - Mathematical projection using rotation matrices to reveal correlations as radar-style streaks
+  - Node.js preprocessing pipeline transforms raw CSV into optimized chart data
+  - Fisher-Yates sampling algorithm handles 10K+ data points efficiently
+  - Smart normalization maps real MPG/CO2 metrics to range/doppler coordinates
+
+  **Interactive Radar Visualizations**
+  - LeoLabs-inspired radar detection aesthetics with dynamic series generation
+  - Responsive chart architecture with overflow detection and safe resizing
+  - Multi-format export (PNG/JPEG/PDF/SVG) with custom tooltip system
+  - Mobile-optimized layouts with breakpoint-specific legend management
+
+</details>
+
+Hotel Charlie preprocesses vehicle data from Kaggle's [Vehicle Data](https://www.kaggle.com/datasets/brllnd/vehicle-data) dataset.
+
 
 ## Getting Started
 
@@ -16,21 +52,22 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Roadmap 🏗️
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Real-Time Data Features- Currently in development (in Active Development)**
+*  🔄 **Polling Demo** - Live vehicle telemetry updates with configurable intervals
+*  📡 **Server-Sent Events** - Streaming data to charts
+*  🌐 **WebSocket Integration** - Bidirectional real-time chart collaboration
 
-## Learn More
+**Analytics & Observability Pipeline**
+*  � **Prometheus Metrics** - Custom instrumentation for chart interactions and API performance
+*  📈 **Grafana Dashboard** - Embedded analytics showing real-time user engagement and system health
+*  🐳 **Docker Compose Stack** - Complete observability setup with containerized monitoring
+*  ⚡ **Event Tracking** - Frontend analytics pipeline capturing user interactions
 
-To learn more about Next.js, take a look at the following resources:
+## License
+[GNU General Public License v2.0](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Created by [Ahn Ming Loke](https://github.com/loke)**  • [LinkedIn](https://www.linkedin.com/in/ahnmingloke/)

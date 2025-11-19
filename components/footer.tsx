@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Container } from "./container";
 
-
 export const Footer = () => {
   return (
     <Container>
@@ -11,7 +10,7 @@ export const Footer = () => {
         </p>
         <div className="mt-4 flex items-center gap-4 md:mt-0">
           <Link
-            href="https://twitter.com"
+            href="https://twitter.com/lokeam"
             className="text-footer-link transition-colors hover:text-gray-900"
           >
             <svg

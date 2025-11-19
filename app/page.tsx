@@ -8,7 +8,7 @@ export default function Home() {
     <div className="flex items-center justify-center bg-black font-sans">
       <main className="flex min-h-[calc(100vh-10rem)] w-full max-w-3xl flex-col py-24 md:py-48 bg-black sm:items-start">
         <div className="h-160 w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-center text-white relative z-20 pb-6">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-center text-white relative z-20 pb-10">
             Hotel Charlie
           </h1>
           <p className="text-white text-center text-lg pb-2">
@@ -18,7 +18,7 @@ export default function Home() {
             Serves pre-processed vehicle data and is simulated to look like radar detections
           </p>
           <p className="text-white text-center text-lg pb-5 md:pb-2">
-            Click the Charts Link at the top to continue
+            Click the top Charts Nav Link to continue
           </p>
           <div className="w-130 md:w-260 h-96 relative pb-28">
             {/* Gradients */}
