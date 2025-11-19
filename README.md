@@ -1,8 +1,8 @@
 **Hotel Charlie** is a showcase of data pre-processing, charting and visualization using the [Highcharts](https://www.highcharts.com) library is simulated to look like radar detections.
 
 ## Screenshots
-
-
+<img width="668" alt="hotel charlie home page" src="https://github.com/user-attachments/assets/d5423d62-1572-439d-b2d0-9499287be78e" />
+<img width="668" alt="hotel charlie chart page" src="https://github.com/user-attachments/assets/c85f69c4-05a6-4c24-a297-ca3b56c5e668" />
 
 ## Technical Highlights
 <details>
