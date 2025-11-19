@@ -101,7 +101,7 @@ const MobileNav = ({ items }: { items: { title: string; href: string }[] }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[60] h-full w-full bg-white shadow-lg dark:bg-neutral-900"
+            className="fixed inset-0 z-60 h-full w-full bg-white shadow-lg dark:bg-neutral-900"
           >
             <div className="absolute right-4 bottom-4">
               <ThemeToggle />
