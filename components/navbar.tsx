@@ -19,60 +19,19 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import LogoIcon from "@/components/ui/icons/LogoIcon";
 import CloseIcon from "@/components/ui/icons/CloseIcon";
 import MenuIcon from "@/components/ui/icons/MenuIcon";
+import ChartPieIcon from "@/components/ui/icons/ChartPieIcon";
 
 
 const navMenuItems = [
+  // {
+  //   title: "Three.js Demos",
+  //   href: "/demos/threejs"
+  // },
   {
-    title: "Three.js Demos",
-    href: "/demos/threejs"
-  },
-  {
-    title: "Chart Demos",
+    title: "Charts",
     href: "/demos/chart"
   }
 ];
-
-// Floating Nav
-const FloatingNav = ({ items }: { items: { title: string; href: string }[]; }) => {
-  const { scrollY } = useScroll();
-  const springConfig = {
-    stiffness: 300,
-    damping: 30,
-  };
-  const motionSpringConfig = useSpring(
-    useTransform(scrollY, [100, 120], [-100, 10]),
-    springConfig,
-  );
-
-  return (
-    <motion.div
-      style={{ y: motionSpringConfig }}
-      className="shadow-aceternity fixed inset-x-0 top-0 z-50 mx-auto hidden max-w-[calc(80rem-4rem)] items-center justify-between bg-white/80 px-2 py-2 backdrop-blur-sm md:flex xl:rounded-2xl dark:bg-neutral-900/80 dark:shadow-[0px_2px_0px_0px_var(--color-neutral-800),0px_-2px_0px_0px_var(--color-neutral-800)]"
-    >
-      {/* Site Logo */}
-      <Link href="/" className="flex items-center gap-2">
-        <LogoIcon className="size-6"/>
-        <span className="text-xl font-bold">Tango Charlie</span>
-      </Link>
-
-      {/* Navigation Links */}
-      <div className="flex items-center gap-10">
-        {items.map((item) => (
-          <Link
-            className="font-medium text-gray-600 transition duration-200 hover:text-neutral-900 dark:text-gray-300 dark:hover:text-neutral-300"
-            href={item.href}
-            key={item.title}
-          >
-            {item.title}
-          </Link>
-        ))}
-      </div>
-      <div className="flex items-center gap-2">
-        <ThemeToggle />
-      </div>
-    </motion.div>
-  );
-};
 
 // Mobile Navigation
 const MobileNav = ({ items }: { items: { title: string; href: string }[] }) => {
@@ -82,7 +41,6 @@ const MobileNav = ({ items }: { items: { title: string; href: string }[] }) => {
     <div className="relative flex items-center justify-between p-2 md:hidden">
       <Link href="/" className="flex items-center gap-2">
         <LogoIcon className="size-6"/>
-        <span className="text-xl font-bold">Tango Charlie</span>
       </Link>
 
       {/*  */}
@@ -156,19 +114,21 @@ const DesktopNav = ({
     <div className="hidden items-center justify-between px-4 py-4 md:flex">
       {/* Site Logo */}
       <Link href="/" className="flex items-center gap-2">
-        <LogoIcon className="size-6"/>
-        <span className="text-xl font-bold">Tango Charlie</span>
+        <LogoIcon className="size-10"/>
       </Link>
 
       <div className="flex items-center gap-10">
         {items.map((item) => (
-          <Link
-            className="font-medium text-gray-600 transition duration-200 hover:text-neutral-900 dark:text-gray-300 dark:hover:text-neutral-300"
-            href={item.href}
-            key={item.title}
-          >
-            {item.title}
-          </Link>
+          <div key={item.title} className="flex items-center gap-2">
+            <Link
+              className="flex items-center gap-2 font-medium text-gray-600 transition duration-200 hover:text-neutral-900 dark:text-gray-300 dark:hover:text-neutral-300"
+              href={item.href}
+              key={item.title}
+            >
+              <ChartPieIcon className="size-6" />
+              {item.title}
+            </Link>
+          </div>
         ))}
       </div>
       <div className="flex items-center gap-2">
@@ -182,7 +142,6 @@ const DesktopNav = ({
 export const NavBar = () => {
   return (
     <Container as="nav" className="">
-      <FloatingNav items={navMenuItems} />
       <DesktopNav items={navMenuItems} />
       <MobileNav items={navMenuItems} />
     </Container>
