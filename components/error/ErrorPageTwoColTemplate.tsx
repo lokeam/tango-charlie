@@ -20,10 +20,10 @@ export const ErrorPageTwoColTemplate: React.FC<ErrorPageTwoColTemplateProps> = (
   children,
 }) => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-background text-foreground px-4">
+    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-black text-white px-4">
       <div className="flex-1 flex flex-col justify-center items-start max-w-xl py-12">
-        <h4 className="text-xl font-semibold text-primary-600 dark:text-primary-500 mb-2">500 Internal Error</h4>
-        <h2 className="text-3xl md:text-4xl font-bold text-white dark:text-white mb-4">{title}</h2>
+        <h4 className="text-xl font-semibold text-red-500 mb-2">500 Internal Error</h4>
+        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{title}</h2>
         {subtext && (
           <p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">{subtext}</p>
         )}
@@ -31,7 +31,7 @@ export const ErrorPageTwoColTemplate: React.FC<ErrorPageTwoColTemplateProps> = (
           <div className="mb-4">{children}</div>
         )}
         <button
-          className="inline-flex text-white bg-primary-600 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900 my-4"
+          className="inline-flex text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-4"
           onClick={onButtonClick}
         >
           {buttonText}

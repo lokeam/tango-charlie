@@ -6,20 +6,17 @@ import Link from "next/link";
 import {
   AnimatePresence,
   motion,
-  useScroll,
-  useSpring,
-  useTransform,
 } from "motion/react";
 
 // Components
 import { Container } from "@/components/container";
-import { ThemeToggle } from '@/components/theme-toggle';
+import { ChartToggle } from '@/components/chart-toggle';
 
 // Icons
 import LogoIcon from "@/components/ui/icons/LogoIcon";
 import CloseIcon from "@/components/ui/icons/CloseIcon";
 import MenuIcon from "@/components/ui/icons/MenuIcon";
-import ChartPieIcon from "@/components/ui/icons/ChartPieIcon";
+import GithubIcon from "@/components/ui/icons/GithubIcon";
 
 
 const navMenuItems = [
@@ -59,10 +56,10 @@ const MobileNav = ({ items }: { items: { title: string; href: string }[] }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-60 h-full w-full bg-white shadow-lg dark:bg-neutral-900"
+            className="fixed inset-0 z-60 h-full w-full bg-neutral-900 shadow-lg"
           >
             <div className="absolute right-4 bottom-4">
-              <ThemeToggle />
+              <ChartToggle />
             </div>
 
             <div className="flex items-center justify-between p-2">
@@ -80,7 +77,7 @@ const MobileNav = ({ items }: { items: { title: string; href: string }[] }) => {
                 <Link
                   href={item.href}
                   key={item.title}
-                  className="px-4 py-2 font-medium text-gray-600 transition duration-200 hover:text-neutral-900 dark:text-gray-300 dark:hover:text-neutral-300"
+                  className="px-4 py-2 font-medium text-gray-300 transition duration-200 hover:text-white dark:text-gray-300 dark:hover:text-neutral-300"
                   onClick={() => setIsOpen(false)}
                 >
                   <motion.div
@@ -121,18 +118,20 @@ const DesktopNav = ({
         {items.map((item) => (
           <div key={item.title} className="flex items-center gap-2">
             <Link
-              className="flex items-center gap-2 font-medium text-gray-600 transition duration-200 hover:text-neutral-900 dark:text-gray-300 dark:hover:text-neutral-300"
+              className="flex items-center gap-2 font-medium text-gray-300 transition duration-200 hover:text-white dark:text-gray-300 dark:hover:text-neutral-300"
               href={item.href}
               key={item.title}
             >
-              <ChartPieIcon className="size-6" />
+              <ChartToggle />
               {item.title}
             </Link>
           </div>
         ))}
       </div>
       <div className="flex items-center gap-2">
-        <ThemeToggle />
+        <Link href="https://github.com/lokeam/tango-charlie" target="_blank">
+          <GithubIcon className="size-6" />
+        </Link>
       </div>
     </div>
   );

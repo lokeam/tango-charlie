@@ -2,7 +2,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Highcharts from 'highcharts';
 import 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
@@ -134,12 +134,13 @@ const options: Highcharts.Options = {
     height: null, // Let container control height
     events: {
       load: function() {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const chart = this;
         console.log(' CHART DEBUG - Load Event');
         console.log('Container parent:', chart.container.parentNode);
         console.log('Container dimensions:', {
-          width: chart.container.parentNode?.offsetWidth,
-          height: chart.container.parentNode?.offsetHeight
+          width: chart.container.parentNode,
+          height: chart.container.parentNode,
         });
         console.log('Chart calculated size:', {
           width: chart.chartWidth,
@@ -278,8 +279,13 @@ const options: Highcharts.Options = {
 
   xAxis: {
     title: {
-      text: 'Relative Fuel Efficiency (projected from MPG)',
-      style: { color: '#7ee7ff', fontSize: '14px' },
+      text: 'Fuel Efficiency (MPG)',
+      style: {
+        color: '#7ee7ff',
+        fontSize: '14px',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis'
+      },
     },
     gridLineColor: '#10252a',
     lineColor: '#345c68',
@@ -355,6 +361,26 @@ const options: Highcharts.Options = {
                     align: 'center',
                     verticalAlign: 'bottom',
                 },
+                xAxis: {
+                    title: {
+                        text: 'MPG',
+                        style: {
+                            color: '#7ee7ff',
+                            fontSize: '12px',
+                            whiteSpace: 'nowrap'
+                        }
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'CO₂ Emissions',
+                        style: {
+                            color: '#f8f0ff',
+                            fontSize: '12px',
+                            whiteSpace: 'nowrap'
+                        }
+                    }
+                }
             }
         }]
     }
