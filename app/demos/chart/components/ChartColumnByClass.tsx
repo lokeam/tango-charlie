@@ -13,13 +13,15 @@ type AggByClassRow = {
   vehicleCount: number;
 };
 
-// Ensure TS sees this as an array of rows
-const rows = aggByClass as AggByClassRow[];
+// Internal component with original logic
+function ChartColumnByClassComponent() {
+  // Ensure TS sees this as an array of rows
+  const rows = aggByClass as AggByClassRow[];
 
-// Categories / data straight from JSON (script already sorted by avgComb08 desc)
-const categories = rows.map(r => r.vClass);
-const colors = rows.map(r => getVehicleClassColor(r.vClass));
-const mpgData = rows.map(r => Number(r.avgComb08.toFixed(1)));
+  // Categories / data straight from JSON (script already sorted by avgComb08 desc)
+  const categories = rows.map(r => r.vClass);
+  const colors = rows.map(r => getVehicleClassColor(r.vClass));
+  const mpgData = rows.map(r => Number(r.avgComb08.toFixed(1)));
 
 const options: Highcharts.Options = {
   chart: {
@@ -146,8 +148,6 @@ const options: Highcharts.Options = {
   ],
 };
 
-// Internal component with original logic
-function ChartColumnByClassComponent() {
   return (
     <div className="w-full h-[500px] sm:h-[400px] md:h-[420px]">
       <HighchartsReact
