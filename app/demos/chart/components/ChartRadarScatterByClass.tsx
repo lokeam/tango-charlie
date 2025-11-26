@@ -4,7 +4,6 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useRef } from 'react';
 import Highcharts from 'highcharts';
-import 'highcharts/modules/exporting';
 import HighchartsReact from 'highcharts-react-official';
 import scatterAll from '@/data/scatterAll.json';
 
