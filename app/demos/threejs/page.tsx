@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { TextureLoader } from 'three';
 import * as THREE from 'three';
+import * as satellite from 'satellite.js';
 
 // Custom Layout Components
 import { PageMain } from '@/components/layout/page-main';
@@ -13,6 +14,97 @@ import { OrbitControls, Stars, Stats } from '@react-three/drei';
 
 // Constants
 const EARTH_DAY_TEXTURE = '/earth_atmos_2048_min.jpg';
+const DEMO_NOTICE = 'This visualization uses publically available orbital data. Not for operational use.'
+
+// ISS Satellite Tracker Component
+function ISSSatellite() {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const [issData, setIssData] = useState<any>(null);
+  const [satrec, setSatrec] = useState<any>(null);
+
+  // Fetch ISS data from our API
+  useEffect(() => {
+    const fetchISSData = async () => {
+      try {
+        const response = await fetch('/api/satellites/stations');
+        const data = await response.json();
+
+        // Find ISS in the stations data
+        const iss = data.data.find((sat: any) => sat.name === 'ISS (ZARYA)');
+        if (iss) {
+          console.log('Found ISS:', iss);
+          setIssData(iss);
+
+          // Create satellite record from TLE data
+          const satRec = satellite.twoline2satrec(iss.line1, iss.line2);
+          setSatrec(satRec);
+        }
+      } catch (error) {
+        console.error('Failed to fetch ISS data:', error);
+      }
+    };
+
+    fetchISSData();
+    // Refresh every 5 minutes
+    const interval = setInterval(fetchISSData, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Update ISS position every frame
+  useFrame(() => {
+    if (!meshRef.current || !satrec) return;
+
+    // Calculate current position
+    const now = new Date();
+    const positionAndVelocity = satellite.propagate(satrec, now);
+
+    if (positionAndVelocity.position && typeof positionAndVelocity.position === 'object') {
+      const { x, y, z } = positionAndVelocity.position;
+
+      // Debug: Log position occasionally
+      if (Math.random() < 0.01) { // Log ~1% of frames
+        console.log('ISS Raw position (km):', { x, y, z });
+        console.log('Distance from Earth center:', Math.sqrt(x*x + y*y + z*z));
+      }
+
+      // Convert from km to Three.js units
+      // Earth radius = 1 unit, ISS altitude ≈ 400km above surface
+      // So ISS should be at radius ≈ 1.06 units
+      const earthRadiusKm = 6371;
+      const scale = 1 / earthRadiusKm;
+
+      // Set position (ECI "space" coordinates, adjust for Three.js)
+
+      // Left/Right stays the same
+      const newX = x * scale;
+
+      // Up/Down: ECI's Z becomes Three.js Y
+      const newY = z * scale;
+
+      // Forward/Back: ECI's Y becomes Three.js -Z
+      const newZ = -y * scale;
+
+      meshRef.current.position.set(newX, newY, newZ);
+
+      // Debug: Log final position occasionally
+      if (Math.random() < 0.01) {
+        console.log('ISS Three.js position:', { x: newX, y: newY, z: newZ });
+        console.log('Distance from origin:', Math.sqrt(newX*newX + newY*newY + newZ*newZ));
+      }
+    } else {
+      console.warn('Invalid ISS position data:', positionAndVelocity);
+    }
+  });
+
+  if (!issData) return null;
+
+  return (
+    <mesh ref={meshRef}>
+      <sphereGeometry args={[0.02, 8, 8]} />
+      <meshBasicMaterial color="#00ff00" />
+    </mesh>
+  );
+}
 
 // Atmosphere glow component using Fresnel effect
 function Atmosphere() {
@@ -124,6 +216,9 @@ function Scene() {
 
       {/* Earth placeholder */}
       <Earth />
+
+      {/* ISS Satellite */}
+      <ISSSatellite />
 
       {/* Camera controls */}
       <OrbitControls
