@@ -16,11 +16,73 @@ import { OrbitControls, Stars, Stats } from '@react-three/drei';
 const EARTH_DAY_TEXTURE = '/earth_atmos_2048_min.jpg';
 const DEMO_NOTICE = 'This visualization uses publically available orbital data. Not for operational use.'
 
+// Satellite Info Panel Component
+interface SatelliteInfoPanelProps {
+  isVisible: boolean;
+  satelliteName: string;
+  position: { lat: number, lng: number; alt: number } | null;
+  onClose: () => void;
+}
+
+function SatelliteInfoPanel({
+  isVisible,
+  satelliteName,
+  position,
+  onClose,
+}: SatelliteInfoPanelProps) {
+  if (!isVisible || !position) return null;
+
+  return (
+    <div className="absolute top-4 right-4 bg-black/90 text-white p-4 rounded-lg border border-green-500 min-w-[250px] z-10">
+      <div className="flex justify-between items-start mb-3">
+        <h3 className="font-bold text-green-400">{satelliteName}</h3>
+        <button
+        onClick={onClose}
+        className="text-gray-400 hover:text-white text-lg leading-none"
+        >
+        ×
+        </button>
+      </div>
+      <div className="space-y-2 text-sm">
+        {/*.= Latitude, Longitude, Altitude */}
+        <div className="flex justify-between">
+          <span className="text-gray-300">Latitude:</span>
+          <span>{position.lat.toFixed(2)}°</span>
+        </div>
+
+        <div className="flex justify-between">
+          <span className="text-gray-300">Longitude:</span>
+          <span>{position.lng.toFixed(2)}°</span>
+        </div>
+
+        <div className="flex justify-between">
+          <span className="text-gray-300">Altitude:</span>
+          <span>{position.alt.toFixed(0)} km</span>
+        </div>
+
+        <div className="text-xs text-gray-400 mt-3 pt-2 border-t border-gray-700">Real-time orbital position</div>
+      </div>
+    </div>
+ );
+}
+
+interface ISSSatelliteProps {
+  onSelect: (satellite: { name: string, position: { lat: number, lng: number, alt: number } }) => void;
+}
+
+
 // ISS Satellite Tracker Component
-function ISSSatellite() {
+function ISSSatellite({ onSelect }: ISSSatelliteProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [issData, setIssData] = useState<any>(null);
   const [satrec, setSatrec] = useState<any>(null);
+
+  // Click + hover detection
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [currentPosition, setCurrentPosition] = useState<{ lat: number, lng: number, alt: number} | null>(null);
+
+
 
   // Fetch ISS data from our API
   useEffect(() => {
@@ -86,10 +148,22 @@ function ISSSatellite() {
 
       meshRef.current.position.set(newX, newY, newZ);
 
+      // Calculate latitude, longitude, altitude for display
+      const distance = Math.sqrt(x*x + y*y + z*z);
+      const altitude = distance - earthRadiusKm;
+      const latitude = Math.asin(z / distance) * (180 / Math.PI);
+      const longitude = Math.atan2(y, x) * (180 / Math.PI);
+
+      setCurrentPosition({
+        lat: latitude,
+        lng: longitude,
+        alt: altitude
+      });
+
       // Debug: Log final position occasionally
       if (Math.random() < 0.01) {
         console.log('ISS Three.js position:', { x: newX, y: newY, z: newZ });
-        console.log('Distance from origin:', Math.sqrt(newX*newX + newY*newY + newZ*newZ));
+        console.log('ISS Lat/Lon/Alt:', { lat: latitude, lng: longitude, alt: altitude });
       }
     } else {
       console.warn('Invalid ISS position data:', positionAndVelocity);
@@ -99,9 +173,26 @@ function ISSSatellite() {
   if (!issData) return null;
 
   return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[0.02, 8, 8]} />
-      <meshBasicMaterial color="#00ff00" />
+    <mesh
+      ref={meshRef}
+      onClick={() => {
+        setIsClicked(!isClicked);
+        if (currentPosition && issData) {
+          onSelect({
+            name: issData.name,
+            position: currentPosition
+          })
+        }
+      }}
+      onPointerEnter={() => setIsHovered(true)}
+      onPointerLeave={() => setIsHovered(false)}
+    >
+      <sphereGeometry args={[isHovered ? 0.07 : 0.05, 16, 16]} />
+      <meshStandardMaterial
+        color={isHovered ? "#00ffff" : "#00ff00"}
+        emissive={isHovered ? "#006666" : "#004400"}
+        emissiveIntensity={isHovered ? 0.8 : 0.5}
+      />
     </mesh>
   );
 }
@@ -170,8 +261,13 @@ function Earth() {
   );
 }
 
+
+interface SceneProps {
+  onSatelliteSelect: (satellite: { name: string, position: { lat: number, lng: number, alt: number } }) => void;
+}
+
 // Scene component containing all 3D
-function Scene() {
+function Scene({ onSatelliteSelect }: SceneProps) {
   return (
     <>
       {/* Starfield background */}
@@ -218,7 +314,7 @@ function Scene() {
       <Earth />
 
       {/* ISS Satellite */}
-      <ISSSatellite />
+      <ISSSatellite onSelect={onSatelliteSelect} />
 
       {/* Camera controls */}
       <OrbitControls
@@ -242,6 +338,14 @@ function LoadingFallback() {
 }
 
 export default function ThreeJSPage() {
+  // State for satellite panel
+  const [selectedSatellite, setSelectedSatellite] = useState<{
+    name: string,
+    position: { lat: number, lng: number, alt: number } | null
+  } | null>(null);
+
+
+
   return (
     <PageMain>
       <div className="max-w-7xl mx-auto space-y-4">
@@ -252,7 +356,7 @@ export default function ThreeJSPage() {
           </h1>
         </header>
 
-        <div className="w-full h-[calc(100vh-8rem)] bg-black rounded-md border border-slate-800 overflow-hidden">
+        <div className="w-full h-[calc(100vh-8rem)] bg-black rounded-md border border-slate-800 overflow-hidden relative">
           <Canvas
             camera={{
               position: [5, 5, 5],
@@ -266,12 +370,20 @@ export default function ThreeJSPage() {
             }}
           >
             <Suspense fallback={null}>
-              <Scene />
+              <Scene onSatelliteSelect={setSelectedSatellite} />
             </Suspense>
 
             {/* Performance stats - only in development */}
             {process.env.NODE_ENV === 'development' && <Stats />}
           </Canvas>
+
+          {/* Satellite Info Panel */}
+          <SatelliteInfoPanel
+            isVisible={!!selectedSatellite}
+            satelliteName={selectedSatellite?.name || ''}
+            position={selectedSatellite?.position || null}
+            onClose={() => setSelectedSatellite(null)}
+          />
         </div>
       </div>
     </PageMain>
